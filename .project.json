@@ -1,61 +1,68 @@
 {
-    "dataBinding": {
-        "/webapp/view/Dialog6.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog15.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog7.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/LandingPage.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/GrByTag.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog8.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/MaterialMasterInfoPage.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog10.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog2.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog4.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog14.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog13.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog12.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog11.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog5.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog9.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog3.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/Dialog1.view.xml": {
-            "entitySet": ""
-        }, 
-        "/webapp/view/GrFromPo.view.xml": {
-            "entitySet": ""
-        } 
+  "dataBinding": {
+    "/webapp/view/Dialog6.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog15.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog7.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/LandingPage.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/GrByTag.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog8.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/MaterialMasterInfoPage.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog10.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog2.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog4.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog14.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog13.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog12.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog11.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog5.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog9.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog3.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/Dialog1.view.xml": {
+      "entitySet": ""
+    },
+    "/webapp/view/GrFromPo.view.xml": {
+      "entitySet": ""
     }
+  },
+  "translation": {
+    "translationDomain": "",
+    "supportedLanguages": "",
+    "defaultLanguage": "",
+    "defaultI18NPropertyFile": "",
+    "resourceModelName": ""
+  }
 }
