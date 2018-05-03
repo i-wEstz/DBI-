@@ -40,7 +40,7 @@
                 <items>
                     <ColumnListItem id="col-template" type="Inactive">
                         <cells>
-                            <ComboBox id="bCombo" editable="true" value="{mtable>number}" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{dialog>/batch}" selectionChange="selectionChange" >
+                            <ComboBox id="bCombo" value="{mtable>number}" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{dialog>/batch}" selectionChange="selectionChange" >
                                 <items>
                                     <core:Item text="{dialog>number}" enabled="true" key="Item_{dialog>number}"/>
                                 </items>

@@ -120,11 +120,11 @@
                         <cells>
                             <ObjectIdentifier title="{order}" text="" titleActive="false" visible="true"/>
                             <ObjectIdentifier title="{number}" text="{description}" titleActive="true" visible="true" titlePress="_onObjectIdentifierTitlePress"/>
-                            <Select id="batchCombo" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{batch}">
+                            <ComboBox id="batchCombo" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{batch}">
                                 <items>
                                     <core:Item text="{number}" enabled="true" key="Item_{number}"/>
                                 </items>
-                            </Select>
+                            </ComboBox>
                             <StepInput value="{gr}" min="0" max="{ordered}" step="1" largerStep="2" displayValuePrecision="0" width="120px" valueState="None" editable="true" enabled="true"/>
                             <Label text="{ordered}/{remaining} {uom}" design="Standard" width="100%" required="false" textAlign="End" textDirection="Inherit"/>
                         </cells>
