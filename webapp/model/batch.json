@@ -1,0 +1,22 @@
+{
+  "batch": [
+    {
+      "order": "PP-206501",
+      "type": "PP",
+      "material": [
+        {
+          "number": "FG0028",
+          "description": "Finished Good",
+          "batch": [
+            {
+              "number": "2458236.08646"
+            },
+            {
+              "number": "2458236.16979"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

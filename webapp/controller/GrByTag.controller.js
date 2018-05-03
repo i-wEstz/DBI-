@@ -23,6 +23,65 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 		},
+		selectedID : "",
+		selectedGr : "",
+		tagChange: function(oEvent) {
+			var tags = this.getView().getModel("tags").getProperty("/tags");
+			var oModel = new sap.ui.model.json.JSONModel();
+			var oTable = this.getView().byId("tagTable");
+			var isFound = false;
+			oModel.setData(tags);
+			for (var i = 0; i < oModel.getData().length; i++) {
+				if (oModel.getData()[i].id == oEvent.mParameters.value) {
+					var orderType = oModel.getData()[i].items[0].type;
+					var orderNo = oModel.getData()[i].items[0].order;
+					var Model = new sap.ui.model.json.JSONModel();
+					Model.setData(oModel.getData()[i].items[0].material);
+					var oCol = this.getView().byId("col-batch");
+					var oToolbar = this.getView().byId("title-toolbar");
+					if (orderType == "PP") {
+						oCol.setVisible(true);
+						this.getView().byId("col-list").setType("Navigation");
+						var batch = this.getView().getModel("batch").getProperty("/batch");
+						var bModel = new sap.ui.model.json.JSONModel();
+						var oCombo = this.getView().byId("batchCombo");
+						bModel.setData(batch);
+						var index = bModel.getData().map(function(o) {
+							return o.order;
+						}).indexOf(orderNo);
+						var bMaterial = bModel.getData()[index].material;
+						for (var j = 0; j < Model.getData().length; j++) {
+							var indexOfMat = bMaterial.map(function(o) {
+								return o.number;
+							}).indexOf(Model.getData()[j].number);
+							if (indexOfMat !== undefined) {
+								var bBatch = bMaterial[indexOfMat].batch;
+								for (var k = 0; k < bBatch.length; k++) {
+									var batchIndex = Model.getData()[j].batch.map(function(o) {
+										return o.number;
+									}).indexOf(bBatch[k].number);
+									if (batchIndex == -1 || batchIndex === undefined) {
+										Model.getData()[j].batch.push.apply(Model.getData()[j].batch, bBatch);
+									}
+								}
+							}
+						}
+
+					} else {
+						oCol.setVisible(false);
+						this.getView().byId("col-list").setType("Inactive");
+					}
+					oToolbar.setText("Items (" + oModel.getData()[i].items[0].material.length + ")");
+					oTable.setModel(Model);
+					isFound = true;
+				}
+
+			}
+			if (isFound === false) {
+				oTable.removeAllItems(true);
+				sap.m.MessageToast.show("ID of Tag not found");
+			}
+		},
 		_onPageNavButtonPress: function(oEvent) {
 
 			var oBindingContext = oEvent.getSource().getBindingContext();
@@ -53,7 +112,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			var sMasterContext = this.sMasterContext ? this.sMasterContext : sPath;
 
 			if (sEntityNameSet !== null) {
-				sNavigationPropertyName = sViaRelation || this.getOwnerComponent().getNavigationPropertyForNavigationWithContext(sEntityNameSet, sRouteName);
+				sNavigationPropertyName = sViaRelation || this.getOwnerComponent().getNavigationPropertyForNavigationWithContext(sEntityNameSet,
+					sRouteName);
 			}
 			if (sNavigationPropertyName !== null && sNavigationPropertyName !== undefined) {
 				if (sNavigationPropertyName === "") {
@@ -168,6 +228,117 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				}
 			});
 
+		},
+		callFragment: function(oEvent) {
+
+			var oView = this.getView();
+			var sDialogName = "Dialog14";
+			var oDialog = oView.byId("dialog14");
+			// create dialog lazily
+			if (!oDialog) {
+				// create dialog via fragment factory
+				oDialog = sap.ui.xmlfragment(oView.getId(), "com.sap.build.standard.dbiB1Wm012GrToTempCopy.view." + sDialogName, this.getView().getController());
+				oView.addDependent(oDialog);
+			}
+
+			oDialog.open();
+			debugger;
+			var selectedValue = oEvent.getSource().getBindingContext().getObject();
+			this.selectedID = oEvent.getSource().mAggregations.cells[2].sId;
+			this.selectedGr = oEvent.getSource().mAggregations.cells[3].sId;
+			var matHeader = {
+				number: selectedValue.number,
+				description: selectedValue.description,
+				ordered: selectedValue.ordered,
+				uom: selectedValue.uom,
+				batch: selectedValue.batch
+			};
+			var selectedBatch = oEvent.getSource().mAggregations.cells[2].getSelectedKey();
+			// var selectedBatchVal = oEvent.getSource().mAggregations.cells[2].getValue();
+			var selectedBatchVal = oEvent.getSource().mAggregations.cells[2].getSelectedItem().getText();
+			var size = selectedValue.batch.length - 1;
+			var Model = new sap.ui.model.json.JSONModel();
+			var mTableModel = new sap.ui.model.json.JSONModel();
+			Model.setData(matHeader);
+			var mTable = {
+				batch: [{
+					number: selectedBatchVal,
+					gr: selectedValue.gr
+				}]
+			};
+			mTableModel.setData(mTable);
+			if(this.getView().byId("batchTable").getModel("mtable") === undefined){
+			this.getView().byId("batchTable").setModel(mTableModel, "mtable");
+			}
+			this.getView().setModel(Model, "dialog");
+			this.getView().byId("stepinp").setValue(selectedValue.gr);
+			var index = selectedValue.batch.map(function(o) {
+				return o.number;
+			}).indexOf(selectedBatch);
+			// this.getView().byId("bCombo").setSelectedKey(selectedBatch);
+			// this.getView().byId("bCombo").setValue(selectedBatchVal);
+
+		},
+		grChange: function(oEvent) {
+
+		},
+		onAdd: function(oEvent) {
+			var mTable = this.getView().byId("batchTable");
+			var mModel = new sap.ui.model.json.JSONModel();
+			var cModel = this.getView().byId("batchTable").getModel("mtable").getData();
+			cModel.batch.push({
+				number: " ",
+				gr: 0
+			});
+			mModel.setData(cModel);
+			mTable.setModel(mModel, "mtable");
+
+		},
+		onOK: function(oEvent) {
+			// var bVal = this.getView().byId("bCombo").getSelectedKey();
+			// this.getView().byId("batchCombo").setSelectedKey(bVal);
+			// debugger;
+			debugger;
+			var selectedKey = this.getView().byId("batchTable").getItems()[0].mAggregations.cells[0].getSelectedKey();
+			var batchLength = this.getView().byId("batchTable").getModel("mtable").getData().batch.length;
+			if(batchLength > 1){
+			sap.ui.getCore().byId(this.selectedID).setEnabled(false);
+			sap.ui.getCore().byId(this.selectedGr).setEnabled(false);
+			sap.ui.getCore().byId(this.selectedID).setValue("Multiple Batch");
+			}
+			else{
+			sap.ui.getCore().byId(this.selectedID).setEnabled(true);
+			sap.ui.getCore().byId(this.selectedGr).setEnabled(true);
+			// sap.ui.getCore().byId(this.selectedID).setSelectedKey(selectedKey);
+			}
+			this.getView().byId("dialog14").close();
+		},
+		onDelete: function(oEvent) {
+			var oTable = this.getView().byId("batchTable");
+			var selected = oTable.getSelectedItems();
+			var mModel = oTable.getModel("mtable").getData();
+
+			for (var i = 0; i < selected.length; i++) {
+
+				var batchValue = selected[i].mAggregations.cells[0].getValue();
+				var index = mModel.batch.map(function(o) {
+					return o.number;
+				}).indexOf(batchValue);
+				debugger;
+				// mModel.remove(index);
+				mModel.batch.splice(index,1);
+
+			}
+			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setData(mModel);
+			oTable.setModel(oModel,"mtable");
+			debugger;
+		},
+		selectionChange: function(oVal) {
+
+		},
+		onCloseDialog: function() {
+			this.getView().byId("dialog14").close();
 		},
 		_onRowPress: function(oEvent) {
 

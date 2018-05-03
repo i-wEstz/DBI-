@@ -16,6 +16,18 @@
 					"odataVersion": "2.0",
 					"localUri": "localService/metadata.xml"
 				}
+			},
+			"tags_ds": {
+				"uri": "model/tags.json",
+				"type": "JSON"
+			},
+			"po_ds": {
+				"uri": "model/po.json",
+				"type": "JSON"
+			},
+			"batch_ds": {
+				"uri": "model/batch.json",
+				"type": "JSON"
 			}
 		},
 		"title": "{{appTitle}}",
@@ -79,6 +91,36 @@
 					"refreshAfterChange": false,
 					"disableHeadRequestForToken": true
 				}
+			},
+			"tags": {
+				"dataSource": "tags_ds",
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {
+					"refreshAfterChange": true,
+					"defaultBindingMode": "TwoWay",
+					"json": true,
+					"bJSON": true
+				}
+			},
+			"po": {
+				"dataSource": "po_ds",
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {
+					"refreshAfterChange": true,
+					"defaultBindingMode": "TwoWay",
+					"json": true,
+					"bJSON": true
+				}
+			},
+			"batch": {
+				"dataSource": "batch_ds",
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {
+					"refreshAfterChange": true,
+					"defaultBindingMode": "TwoWay",
+					"json": true,
+					"bJSON": true
+				}
 			}
 		},
 		"resources": {
@@ -128,43 +170,37 @@
 					"transition": "slide"
 				}
 			},
-			"routes": [
-				{
-					"pattern": "LandingPage/:context:",
-					"name": "LandingPage",
-					"target": [
-						"LandingPage"
-					]
-				},
-				{
-					"pattern": "",
-					"name": "default",
-					"target": [
-						"LandingPage"
-					]
-				},
-				{
-					"pattern": "GrByTag/:context:",
-					"name": "GrByTag",
-					"target": [
-						"GrByTag"
-					]
-				},
-				{
-					"pattern": "MaterialMasterInfoPage/:context:",
-					"name": "MaterialMasterInfoPage",
-					"target": [
-						"MaterialMasterInfoPage"
-					]
-				},
-				{
-					"pattern": "GrFromPo/:context:",
-					"name": "GrFromPo",
-					"target": [
-						"GrFromPo"
-					]
-				}
-			]
+			"routes": [{
+				"pattern": "LandingPage/:context:",
+				"name": "LandingPage",
+				"target": [
+					"LandingPage"
+				]
+			}, {
+				"pattern": "",
+				"name": "default",
+				"target": [
+					"LandingPage"
+				]
+			}, {
+				"pattern": "GrByTag/:context:",
+				"name": "GrByTag",
+				"target": [
+					"GrByTag"
+				]
+			}, {
+				"pattern": "MaterialMasterInfoPage/:context:",
+				"name": "MaterialMasterInfoPage",
+				"target": [
+					"MaterialMasterInfoPage"
+				]
+			}, {
+				"pattern": "GrFromPo/:context:",
+				"name": "GrFromPo",
+				"target": [
+					"GrFromPo"
+				]
+			}]
 		}
 	}
 }

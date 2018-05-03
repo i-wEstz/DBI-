@@ -34,6 +34,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 		onInit: function() {
 			this._oDialog = this.getView().getContent()[0];
+			debugger;
 
 		},
 		onExit: function() {

@@ -1,5 +1,5 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.sap.build.standard.dbiB1Wm012GrToTempCopy.controller.GrByTag" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
-    <Page showHeader="true" title="Tag Receive" showFooter="true" showNavButton="true" navButtonPress="_onPageNavButtonPress">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" controllerName="com.sap.build.standard.dbiB1Wm012GrToTempCopy.controller.GrByTag">
+    <Page showHeader="true" title="Tag Receive" showFooter="true" showNavButton="false" navButtonPress="_onPageNavButtonPress">
         <content>
             <form:Form width="100%" editable="true" visible="true">
                 <form:title>
@@ -13,7 +13,7 @@
                                     <Label text="Tag ID" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input placeholder="Scan or Key-in" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0"/>
+                                    <Input placeholder="Scan or Key-in" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0" id="tagid" change="tagChange"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>
@@ -66,10 +66,10 @@
                     </form:Form>
                 </content>
             </Panel>
-            <Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" delete="_onTableDelete">
+            <Table id="tagTable" width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" delete="_onTableDelete" items="{/}" >
                 <infoToolbar>
                     <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-                        <content>
+                        <content> 
                             <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit"/>
                         </content>
                     </Toolbar>
@@ -77,7 +77,7 @@
                 <headerToolbar>
                     <Toolbar width="auto" height="46px" design="Transparent" visible="true" enabled="true">
                         <content>
-                            <Title text="Items (3)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true"/>
+                            <Title id="title-toolbar" text="Items (0)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true"/>
                             <ToolbarSpacer width=""/>
                         </content>
                         <tooltip/>
@@ -96,7 +96,7 @@
                         </header>
                         <footer/>
                     </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Block" mergeDuplicates="false">
+                    <Column id="col-batch" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Block" mergeDuplicates="false">
                         <header>
                             <Text text="Batch" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"/>
                         </header>
@@ -108,7 +108,7 @@
                         </header>
                         <footer/>
                     </Column>
-                    <Column width="auto" hAlign="Right" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                    <Column width="auto" hAlign="Right" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
                         <header>
                             <Text text="Ordered/Remaing" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"/>
                         </header>
@@ -116,36 +116,34 @@
                     </Column>
                 </columns>
                 <items>
-                    <ColumnListItem type="Navigation" press="_onRowPress">
+                    <ColumnListItem id="col-list" type="Navigation" press="callFragment">
                         <cells>
-                            <ObjectIdentifier title="Production - 106500" text="" titleActive="false" visible="true"/>
-                            <ObjectIdentifier title="332-213" text="Material Name" titleActive="true" visible="true" titlePress="_onObjectIdentifierTitlePress"/>
-                            <ComboBox editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+                            <ObjectIdentifier title="{order}" text="" titleActive="false" visible="true"/>
+                            <ObjectIdentifier title="{number}" text="{description}" titleActive="true" visible="true" titlePress="_onObjectIdentifierTitlePress"/>
+                            <Select id="batchCombo" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{batch}">
                                 <items>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
+                                    <core:Item text="{number}" enabled="true" key="Item_{number}"/>
                                 </items>
-                            </ComboBox>
-                            <StepInput value="10" min="0" max="10" step="1" largerStep="2" displayValuePrecision="0" width="120px" valueState="None" editable="true" enabled="true"/>
-                            <Label text="10/10 EA" design="Standard" width="100%" required="false" textAlign="End" textDirection="Inherit"/>
+                            </Select>
+                            <StepInput value="{gr}" min="0" max="{ordered}" step="1" largerStep="2" displayValuePrecision="0" width="120px" valueState="None" editable="true" enabled="true"/>
+                            <Label text="{ordered}/{remaining} {uom}" design="Standard" width="100%" required="false" textAlign="End" textDirection="Inherit"/>
                         </cells>
                     </ColumnListItem>
-                    <ColumnListItem type="Navigation" press="_onRowPress1">
-                        <cells>
-                            <ObjectIdentifier title="Purchasing - 201000523" text="" titleActive="false" visible="true"/>
-                            <ObjectIdentifier title="332-214" text="Material Name" titleActive="true" visible="true" titlePress="_onObjectIdentifierTitlePress1"/>
-                            <ComboBox selectedKey="Multiple Batch" editable="false" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%">
-                                <items>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
-                                    <core:Item text="Item" enabled="true" key="Item"/>
-                                </items>
-                            </ComboBox>
-                            <StepInput value="20" min="0" max="10" step="1" largerStep="2" displayValuePrecision="0" width="120px" valueState="None" editable="false" enabled="false"/>
-                            <Label text="20/20 EA" design="Standard" width="100%" required="false" textAlign="End" textDirection="Inherit"/>
-                        </cells>
-                    </ColumnListItem>
+                    <!--<ColumnListItem type="Navigation" press="_onRowPress1">-->
+                    <!--    <cells>-->
+                    <!--        <ObjectIdentifier title="Purchasing - 201000523" text="" titleActive="false" visible="true"/>-->
+                    <!--        <ObjectIdentifier title="332-214" text="Material Name" titleActive="true" visible="true" titlePress="_onObjectIdentifierTitlePress1"/>-->
+                    <!--        <ComboBox selectedKey="Multiple Batch" editable="false" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%">-->
+                    <!--            <items>-->
+                    <!--                <core:Item text="Item" enabled="true" key="Item"/>-->
+                    <!--                <core:Item text="Item" enabled="true" key="Item"/>-->
+                    <!--                <core:Item text="Item" enabled="true" key="Item"/>-->
+                    <!--            </items>-->
+                    <!--        </ComboBox>-->
+                    <!--        <StepInput value="20" min="0" max="10" step="1" largerStep="2" displayValuePrecision="0" width="120px" valueState="None" editable="false" enabled="false"/>-->
+                    <!--        <Label text="20/20 EA" design="Standard" width="100%" required="false" textAlign="End" textDirection="Inherit"/>-->
+                    <!--    </cells>-->
+                    <!--</ColumnListItem>-->
                 </items>
             </Table>
         </content>
