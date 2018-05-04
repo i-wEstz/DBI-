@@ -267,7 +267,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			var mTable = {
 				batch: [{
 					number: selectedBatchVal,
-					gr: selectedValue.gr
+					gr: selectedValue.gr,
+					max: selectedValue.ordered
 				}]
 			};
 			mTableModel.setData(mTable);
@@ -296,6 +297,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 			this.getView().setModel(Model, "dialog");
 			this.getView().byId("stepinp").setValue(selectedValue.gr);
+			this.getView().byId("stepinp").setMax(selectedValue.ordered);
 			var index = selectedValue.batch.map(function(o) {
 				return o.number;
 			}).indexOf(selectedBatch);
@@ -304,16 +306,42 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 		},
 		grChange: function(oEvent) {
+			debugger;
+			var items = this.getView().byId("batchTable").getItems();
+			var maxOrdered = parseInt(this.getView().getModel("dialog").getData().ordered);
+			var currentID = oEvent.getSource().getId();
+			var currentVal = parseInt(oEvent.getSource().getValue());
+			var oldVal = oEvent.getSource()._sOldValue;
+			var totalval = 0;
+			for (var i = 0; i < items.length; i++) {
+				totalval = totalval + parseInt(items[i].getCells()[1].getValue());
+			}
+			if (totalval > maxOrdered) {
+				sap.ui.getCore().byId(currentID).setValue(oldVal);
+				var diff = currentVal - oldVal;
+				totalval = totalval - diff;
+			}
+			var maxdiff = maxOrdered - totalval;
+			if (maxdiff >= 0) {
+				for (var j = 0; j < items.length; j++) {
+					var id = items[j].getCells()[1].getId();
+					var currVal = parseInt(items[j].getCells()[1].getValue());
+					var currentInput = sap.ui.getCore().byId(id);
+					currentInput.setMax(currVal + maxdiff);
+				}
+			}
 
 		},
 		onAdd: function(oEvent) {
 			var mTable = this.getView().byId("batchTable");
 			var mModel = new sap.ui.model.json.JSONModel();
+			var max = this.getView().getModel("dialog").getData().ordered;
 			debugger;
 			var cModel = this.getView().byId("batchTable").getModel("mtable").getData();
 			cModel.batch.push({
 				number: "",
-				gr: 0
+				gr: 0,
+				max: max
 			});
 			mModel.setData(cModel);
 			mTable.setModel(mModel, "mtable");
@@ -333,6 +361,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				if (this.getView().byId("batchTable").getItems().length > 0) {
 					var selectedKey = this.getView().byId("batchTable").getItems()[0].mAggregations.cells[0].getSelectedKey();
 					var selectedVal = this.getView().byId("batchTable").getItems()[0].mAggregations.cells[0].getValue();
+					var selectedGr = parseInt(this.getView().byId("batchTable").getItems()[0].mAggregations.cells[1].getValue());
+
 					// var batchLength = this.getView().byId("batchTable").getModel("mtable").getData().batch.length;
 					var batchLength = this.getView().byId("batchTable").getItems().length;
 					var sModel = this.getView().getModel("dialog").getData();
@@ -343,19 +373,27 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 						sap.ui.getCore().byId(this.selectedID).setEnabled(false);
 						sap.ui.getCore().byId(this.selectedGr).setEnabled(false);
 						sap.ui.getCore().byId(this.selectedID).setValue("Multiple Batch");
-						debugger;
+						var totalGr = 0;
+						var items = this.getView().byId("batchTable").getItems();
+						for (var i = 0; i < items.length; i++) {
+							totalGr = totalGr + parseInt(items[i].getCells()[1].getValue());
+						}
+						sap.ui.getCore().byId(this.selectedGr).setValue(totalGr);
+						this.previousModel = JSON.parse(JSON.stringify(this.getView().byId("batchTable").getModel("mtable").getData()));
+						this.getView().byId("dialog14").close();
 					} else {
 						sap.ui.getCore().byId(this.selectedID).setEnabled(true);
 						sap.ui.getCore().byId(this.selectedGr).setEnabled(true);
 						// sap.ui.getCore().byId(this.selectedID).setSelectedKey(selectedKey);
 						sap.ui.getCore().byId(this.selectedID).setValue(selectedVal);
 						sap.ui.getCore().byId(this.selectedID).setSelectedIndex(selectedIndex);
+						sap.ui.getCore().byId(this.selectedGr).setValue(selectedGr);
+						this.previousModel = JSON.parse(JSON.stringify(this.getView().byId("batchTable").getModel("mtable").getData()));
+						this.getView().byId("dialog14").close();
 					}
 					// this.getView().setModel(this.getView().byId("batchTable").getModel("mtable"),"prevModel");
 					// this.previousModel = Object.assign({},this.getView().byId("batchTable").getModel("mtable"));
-					this.previousModel = JSON.parse(JSON.stringify(this.getView().byId("batchTable").getModel("mtable").getData()));
-					debugger;
-					this.getView().byId("dialog14").close();
+					// this.previousModel = JSON.parse(JSON.stringify(this.getView().byId("batchTable").getModel("mtable").getData()));
 				} else {
 					sap.m.MessageToast.show("Please, specify atleast one batch.");
 				}

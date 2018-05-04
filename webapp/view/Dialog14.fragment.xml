@@ -45,7 +45,7 @@
                                     <core:Item text="{dialog>number}" enabled="true" key="Item_{dialog>number}"/>
                                 </items>
                             </ComboBox>
-                            <StepInput id="stepinp" value="{mtable>gr}" min="0" max="{dialog>/ordered}" step="1" largerStep="2" displayValuePrecision="0" width="auto" valueState="None" editable="true" enabled="true" liveChange="grChange" />
+                            <StepInput id="stepinp" value="{mtable>gr}" min="0" max="{mtable>max}" step="1" largerStep="2" displayValuePrecision="0" width="auto" valueState="None" editable="true" enabled="true" change="grChange" />
                         </cells>
                     </ColumnListItem>
                 </items>
